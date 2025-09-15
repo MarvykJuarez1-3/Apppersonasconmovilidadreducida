@@ -1,0 +1,103 @@
+/* ================== */
+/* Estilos generales */
+/* ================== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Contenedor principal */
+.container {
+    display: flex;
+    height: calc(100vh - 70px); /* altura menos header */
+}
+
+/* Mapa */
+#map {
+    flex: 2;
+    height: 100%;
+}
+
+/* Barra lateral */
+.sidebar {
+    flex: 1;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.sidebar input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#rutaInfo {
+    margin-top: 1rem;
+    background-color: #e8e8e8;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+#listaPuntos {
+    list-style: none;
+    padding-left: 0;
+}
+
+#listaPuntos li {
+    padding: 0.3rem 0;
+}
+
+/* ================== */
+/* Media Queries: Responsive */
+/* ================== */
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #map {
+        height: 300px;
+    }
+
+    .sidebar input, .sidebar button {
+        font-size: 0.9rem;
+    }
+}
+

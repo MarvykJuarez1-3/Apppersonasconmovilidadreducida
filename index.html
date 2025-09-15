@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Movilidad Reducida - Sprint 1 </title>
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet Routing Machine -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+</head>
+<body>
+    <header>
+        <h1>Rutas Accesibles para Movilidad Reducida</h1>
+    </header>
+
+    <div class="container">
+        <div id="map"></div>
+
+        <div class="sidebar">
+            <h2>Generar Ruta</h2>
+            <label for="origen">Origen (Lat,Lon):</label>
+            <input type="text" id="origen" placeholder="Ej: 19.4326,-99.1332">
+
+            <label for="destino">Destino (Lat,Lon):</label>
+            <input type="text" id="destino" placeholder="Ej: 19.4270,-99.1677">
+
+            <button id="generarRuta">Generar Ruta</button>
+
+            <div id="rutaInfo">
+                <p>Distancia y tiempo de la ruta aparecerán aquí.</p>
+            </div>
+
+            <h2>Puntos Accesibles</h2>
+            <ul id="listaPuntos"></ul>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
