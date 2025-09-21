@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Movilidad Reducida - Sprint 1 </title>
+    <title>App Movilidad Reducida - Sprint 2</title>
 
     <!-- CSS principal -->
     <link rel="stylesheet" href="style.css">
@@ -20,24 +20,46 @@
     </header>
 
     <div class="container">
+        <!-- Mapa -->
         <div id="map"></div>
 
+        <!-- Barra lateral -->
         <div class="sidebar">
+
+            <!-- ========================= -->
+            <!-- Sprint 1: Generar ruta -->
+            <!-- ========================= -->
             <h2>Generar Ruta</h2>
             <label for="origen">Origen (Lat,Lon):</label>
             <input type="text" id="origen" placeholder="Ej: 19.4326,-99.1332">
-
             <label for="destino">Destino (Lat,Lon):</label>
             <input type="text" id="destino" placeholder="Ej: 19.4270,-99.1677">
-
             <button id="generarRuta">Generar Ruta</button>
-
             <div id="rutaInfo">
                 <p>Distancia y tiempo de la ruta aparecerán aquí.</p>
             </div>
 
+            <!-- ========================= -->
+            <!-- Sprint 2: Filtros -->
+            <!-- ========================= -->
+            <h2>Filtros de puntos</h2>
+            <label><input type="checkbox" value="rampa" checked> Rampa</label>
+            <label><input type="checkbox" value="ascensor" checked> Ascensor</label>
+            <label><input type="checkbox" value="obstaculo" checked> Obstáculo</label>
+
+            <!-- ========================= -->
+            <!-- Sprint 1: Lista de puntos accesibles -->
+            <!-- ========================= -->
             <h2>Puntos Accesibles</h2>
             <ul id="listaPuntos"></ul>
+
+            <!-- ========================= -->
+            <!-- Sprint 2: Sistema de rutas favoritas -->
+            <!-- ========================= -->
+            <h2>Rutas favoritas</h2>
+            <ul id="listaFavoritos"></ul>
+            <button id="guardarRuta">Guardar Ruta Actual</button>
+
         </div>
     </div>
 
