@@ -67,6 +67,17 @@ document.getElementById("generarRuta").addEventListener("click", () => {
         const distancia = (route.summary.totalDistance / 1000).toFixed(2);
         const tiempo = (route.summary.totalTime / 60).toFixed(0);
         document.getElementById("rutaInfo").innerText = `Distancia: ${distancia} km | Tiempo aprox.: ${tiempo} min`;
+
+        // Sprint 3: alertar si la ruta pasa por un obstáculo
+        const coordsRuta = route.coordinates;
+        puntosAccesibles.forEach(p => {
+            coordsRuta.forEach(c => {
+                const distanciaPunto = map.distance([p.lat, p.lon], c);
+                if (distanciaPunto < 20 && p.tipo === "obstaculo") {
+                    enviarAlerta(p);
+                }
+            });
+        });
     });
 });
 
@@ -156,3 +167,37 @@ puntosAccesibles.forEach((p, index) => {
     });
 });
 
+// =======================
+// Sprint 3: Alertas en tiempo real
+// =======================
+
+// Función para resaltar lista cuando hay alerta
+function resaltarListaAlerta(punto) {
+    const index = puntosAccesibles.indexOf(punto);
+    if (index >= 0) {
+        const li = listaPuntos.children[index];
+        li.classList.add("alerta");
+        setTimeout(() => li.classList.remove("alerta"), 3000);
+    }
+}
+
+// Función para enviar alerta
+function enviarAlerta(punto) {
+    alert(`¡Alerta! Se detectó un obstáculo en: ${punto.nombre}`);
+    punto.marker.setStyle({ color: "red", radius: 15 });
+    resaltarListaAlerta(punto);
+    setTimeout(() => {
+        let color = punto.tipo === "rampa" ? "green" : punto.tipo === "ascensor" ? "blue" : "red";
+        punto.marker.setStyle({ color: color, radius: 10 });
+    }, 3000);
+}
+
+// Simulación de alertas cada 12 segundos
+setInterval(() => {
+    const obstaculos = puntosAccesibles.filter(p => p.tipo === "obstaculo");
+    if (obstaculos.length === 0) return;
+
+    const indice = Math.floor(Math.random() * obstaculos.length);
+    const puntoAlerta = obstaculos[indice];
+    enviarAlerta(puntoAlerta);
+}, 12000);

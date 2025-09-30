@@ -81,6 +81,12 @@ li.resaltado {
     r: 15 !important;
 }
 
+/* Sprint 3: alerta en lista */
+li.alerta {
+    background-color: #ff4d4d; /* rojo */
+    color: white;
+}
+
 /* ================== */
 /* Media Queries: Responsive */
 /* ================== */
@@ -106,5 +112,3 @@ li.resaltado {
         font-size: 0.9rem;
     }
 }
-
-
