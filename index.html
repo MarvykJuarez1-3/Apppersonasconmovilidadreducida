@@ -1,74 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Movilidad Reducida - Sprint 3</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movilidad Reducida App - Pro Final</title>
 
-    <!-- CSS principal -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-    <!-- Leaflet Routing Machine -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 </head>
 <body>
-    <header>
-        <h1>Rutas Accesibles para Movilidad Reducida</h1>
-    </header>
 
-    <div class="container">
-        <!-- Mapa -->
-        <div id="map"></div>
+<!-- ======================= -->
+<!-- Sprint 1: Header y Menú -->
+<!-- ======================= -->
+<header>
+  <h1>Movilidad Reducida</h1>
+  <button id="menuToggle" class="menu-toggle" aria-label="Menú">&#9776;</button>
+  <nav>
+    <ul id="navList">
+      <li><a href="#" data-section="inicio" class="active">Inicio</a></li>
+      <li><a href="#" data-section="mapa">Mapa</a></li>
+      <li><a href="#" data-section="registro">Registro</a></li>
+    </ul>
+  </nav>
+</header>
 
-        <!-- Barra lateral -->
-        <div class="sidebar">
-
-            <!-- ========================= -->
-            <!-- Sprint 1: Generar ruta -->
-            <!-- ========================= -->
-            <h2>Generar Ruta</h2>
-            <label for="origen">Origen (Lat,Lon):</label>
-            <input type="text" id="origen" placeholder="Ej: 19.4326,-99.1332">
-            <label for="destino">Destino (Lat,Lon):</label>
-            <input type="text" id="destino" placeholder="Ej: 19.4270,-99.1677">
-            <button id="generarRuta">Generar Ruta</button>
-            <div id="rutaInfo">
-                <p>Distancia y tiempo de la ruta aparecerán aquí.</p>
-            </div>
-
-            <!-- ========================= -->
-            <!-- Sprint 2: Filtros -->
-            <!-- ========================= -->
-            <h2>Filtros de puntos</h2>
-            <label><input type="checkbox" value="rampa" checked> Rampa</label>
-            <label><input type="checkbox" value="ascensor" checked> Ascensor</label>
-            <label><input type="checkbox" value="obstaculo" checked> Obstáculo</label>
-
-            <!-- ========================= -->
-            <!-- Sprint 1: Lista de puntos accesibles -->
-            <!-- ========================= -->
-            <h2>Puntos Accesibles</h2>
-            <ul id="listaPuntos"></ul>
-
-            <!-- ========================= -->
-            <!-- Sprint 2: Sistema de rutas favoritas -->
-            <!-- ========================= -->
-            <h2>Rutas favoritas</h2>
-            <ul id="listaFavoritos"></ul>
-            <button id="guardarRuta">Guardar Ruta Actual</button>
-
-        </div>
+<main>
+  <!-- ======================= -->
+  <!-- Sprint 1: Inicio -->
+  <!-- ======================= -->
+  <section id="inicio" class="section active">
+    <div class="card">
+      <h2>Bienvenido</h2>
+      <p>Explora rutas accesibles y registra voluntarios fácilmente.</p>
+      <button class="btn-app" data-section="mapa">Ir al Mapa</button>
+      <button class="btn-app" data-section="registro">Registro de Voluntarios</button>
     </div>
+  </section>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <!-- Leaflet Routing Machine JS -->
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <script src="app.js"></script>
+  <!-- ======================= -->
+  <!-- Sprint 2: Mapa -->
+  <!-- ======================= -->
+  <section id="mapa" class="section">
+    <div class="map-container">
+      <div id="map"></div>
+      <div class="sidebar">
+        <h2>Puntos Accesibles</h2>
+        <ul id="listaPuntos"></ul>
+        <h3>Filtros</h3>
+        <label><input type="checkbox" value="rampa" checked> Rampa</label>
+        <label><input type="checkbox" value="ascensor" checked> Ascensor</label>
+        <label><input type="checkbox" value="obstaculo" checked> Obstáculo</label>
+
+        <!-- ======================= -->
+        <!-- Sprint 3: Historial de alertas -->
+        <!-- ======================= -->
+        <h3>Historial de Alertas</h3>
+        <ul id="historialAlertas"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= -->
+  <!-- Sprint 4: Registro Voluntarios -->
+  <!-- ======================= -->
+  <section id="registro" class="section">
+    <div class="form-container">
+      <h2>Registro de Voluntarios</h2>
+      <form id="formVoluntarios">
+        <label for="nombre">Nombre completo:</label>
+        <input type="text" id="nombre" required>
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" required>
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" required>
+        <label for="comentario">Comentario:</label>
+        <textarea id="comentario" rows="4" placeholder="Opcional"></textarea>
+        <button type="submit">Registrarse</button>
+      </form>
+      <div id="mensajeRegistro"></div>
+      <div id="numVoluntarios">Voluntarios registrados: 0</div>
+
+      <h3>Voluntarios Registrados</h3>
+      <table id="tablaVoluntarios">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div id="notificaciones"></div>
+
+<button id="darkModeToggle" class="btn-darkmode" title="Modo oscuro">🌓</button>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
-
 

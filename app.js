@@ -1,203 +1,120 @@
-// =======================
-// Sprint 1: Inicializar mapa y rutas
-// =======================
-const map = L.map('map').setView([19.4326, -99.1332], 13);
+// Navegación
+const sections = document.querySelectorAll(".section");
+const navLinks = document.querySelectorAll("header nav ul li a");
+function mostrarSeccion(id){
+  sections.forEach(sec=>sec.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  navLinks.forEach(l=>l.classList.remove("active"));
+  const link=document.querySelector(`a[data-section="${id}"]`);
+  if(link) link.classList.add("active");
+  if(id==="mapa") setTimeout(()=>{ map.invalidateSize(); },100);
+}
+navLinks.forEach(link=>link.addEventListener("click",e=>{ e.preventDefault(); mostrarSeccion(link.dataset.section); }));
+document.querySelectorAll(".btn-app").forEach(btn=>btn.addEventListener("click",()=>{ mostrarSeccion(btn.dataset.section); }));
 
-// Capa base
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+// Hamburguesa
+const menuToggle=document.getElementById("menuToggle");
+const navList=document.getElementById("navList");
+menuToggle.addEventListener("click",()=>{ navList.classList.toggle("show"); });
 
-// Datos simulados de puntos accesibles
-const puntosAccesibles = [
-    { nombre: "Rampa Central", lat: 19.4326, lon: -99.1332, tipo: "rampa" },
-    { nombre: "Ascensor Plaza", lat: 19.4270, lon: -99.1677, tipo: "ascensor" },
-    { nombre: "Obstáculo Temporal", lat: 19.4350, lon: -99.1400, tipo: "obstaculo" }
+// Mapa y clusters
+const map=L.map('map').setView([19.4326,-99.1332],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution:'&copy; OpenStreetMap contributors' }).addTo(map);
+const markersCluster=L.markerClusterGroup().addTo(map);
+const puntosAccesibles=[
+  {nombre:"Rampa Central",lat:19.4326,lon:-99.1332,tipo:"rampa",color:"green"},
+  {nombre:"Ascensor Plaza",lat:19.4270,lon:-99.1677,tipo:"ascensor",color:"blue"},
+  {nombre:"Obstáculo Temporal",lat:19.4350,lon:-99.1400,tipo:"obstaculo",color:"red"}
 ];
-
-// Mostrar marcadores en el mapa y lista lateral
-puntosAccesibles.forEach(p => {
-    let color;
-    if (p.tipo === "rampa") color = "green";
-    else if (p.tipo === "ascensor") color = "blue";
-    else color = "red";
-
-    const marker = L.circleMarker([p.lat, p.lon], { color: color, radius: 10 })
-        .addTo(map)
-        .bindPopup(`${p.nombre} (${p.tipo})`);
-
-    p.marker = marker; // Sprint 2: guardar marcador para filtros
+const lista=document.getElementById("listaPuntos");
+puntosAccesibles.forEach(p=>{
+  const icon=L.icon({iconUrl:`https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${p.color.replace("#","")}`,iconSize:[21,34],iconAnchor:[10,34],popupAnchor:[0,-28]});
+  p.marker=L.marker([p.lat,p.lon],{icon}).bindPopup(`${p.nombre} (${p.tipo})`);
+  markersCluster.addLayer(p.marker);
+  const li=document.createElement("li");
+  li.innerText=`${p.nombre} (${p.tipo})`;
+  li.addEventListener("mouseover",()=>{ p.marker.openPopup(); li.classList.add("resaltado"); });
+  li.addEventListener("mouseout",()=>{ p.marker.closePopup(); li.classList.remove("resaltado"); });
+  lista.appendChild(li);
 });
+const checkboxes=document.querySelectorAll(".sidebar input[type=checkbox]");
+checkboxes.forEach(cb=>cb.addEventListener("change",()=>{
+  const selected=Array.from(checkboxes).filter(c=>c.checked).map(c=>c.value);
+  markersCluster.clearLayers();
+  puntosAccesibles.forEach(p=>{ if(selected.includes(p.tipo)) markersCluster.addLayer(p.marker); });
+}));
 
-// Crear lista lateral de puntos
-const listaPuntos = document.getElementById("listaPuntos");
-puntosAccesibles.forEach(p => {
-    const li = document.createElement("li");
-    li.innerText = `${p.nombre} (${p.tipo})`;
-    listaPuntos.appendChild(li);
-});
+// Alertas e historial
+const historialAlertas=document.getElementById("historialAlertas");
+function revisarObstaculos(){
+  puntosAccesibles.forEach(p=>{
+    if(p.tipo==="obstaculo"){
+      const mensaje=`¡Alerta! Obstáculo detectado en ${p.nombre}`;
+      mostrarNotificacion(mensaje,"alerta-roja");
 
-// =======================
-// Sprint 1: Función para generar ruta
-// =======================
-let controlRuta = null;
-document.getElementById("generarRuta").addEventListener("click", () => {
-    const origenInput = document.getElementById("origen").value.split(",");
-    const destinoInput = document.getElementById("destino").value.split(",");
-
-    if (origenInput.length !== 2 || destinoInput.length !== 2) {
-        alert("Ingresa correctamente las coordenadas.");
-        return;
+      const li=document.createElement("li");
+      li.innerText=mensaje;
+      const btnCerrar=document.createElement("span");
+      btnCerrar.innerText=" ✖";
+      btnCerrar.style.cursor="pointer";
+      btnCerrar.style.marginLeft="10px";
+      btnCerrar.addEventListener("click",()=>{ li.remove(); });
+      li.appendChild(btnCerrar);
+      historialAlertas.prepend(li);
     }
+  });
+}
+setInterval(revisarObstaculos,10000);
 
-    const origen = [parseFloat(origenInput[0]), parseFloat(origenInput[1])];
-    const destino = [parseFloat(destinoInput[0]), parseFloat(destinoInput[1])];
-
-    if (controlRuta) map.removeControl(controlRuta);
-
-    controlRuta = L.Routing.control({
-        waypoints: [L.latLng(origen), L.latLng(destino)],
-        lineOptions: { styles: [{ color: 'orange', weight: 5 }] },
-        createMarker: function(i, wp) { return L.marker(wp.latLng); },
-        routeWhileDragging: false
-    }).addTo(map);
-
-    controlRuta.on('routesfound', function(e) {
-        const route = e.routes[0];
-        const distancia = (route.summary.totalDistance / 1000).toFixed(2);
-        const tiempo = (route.summary.totalTime / 60).toFixed(0);
-        document.getElementById("rutaInfo").innerText = `Distancia: ${distancia} km | Tiempo aprox.: ${tiempo} min`;
-
-        // Sprint 3: alertar si la ruta pasa por un obstáculo
-        const coordsRuta = route.coordinates;
-        puntosAccesibles.forEach(p => {
-            coordsRuta.forEach(c => {
-                const distanciaPunto = map.distance([p.lat, p.lon], c);
-                if (distanciaPunto < 20 && p.tipo === "obstaculo") {
-                    enviarAlerta(p);
-                }
-            });
-        });
-    });
-});
-
-// =======================
-// Sprint 2: Filtros de puntos
-// =======================
-const checkboxes = document.querySelectorAll(".sidebar input[type=checkbox]");
-checkboxes.forEach(cb => {
-    cb.addEventListener("change", () => {
-        puntosAccesibles.forEach(p => {
-            const marker = p.marker;
-            const checked = Array.from(checkboxes)
-                                .filter(c => c.checked)
-                                .map(c => c.value);
-            if (checked.includes(p.tipo)) marker.addTo(map);
-            else map.removeLayer(marker);
-        });
-    });
-});
-
-// =======================
-// Sprint 2: Sistema de rutas favoritas
-// =======================
-document.getElementById("guardarRuta").addEventListener("click", () => {
-    if (!controlRuta) return alert("Genera primero una ruta.");
-    const ruta = {
-        origen: controlRuta.getWaypoints()[0].latLng,
-        destino: controlRuta.getWaypoints()[1].latLng
-    };
-    let favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
-    favoritos.push(ruta);
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    actualizarListaFavoritos();
-});
-
-function actualizarListaFavoritos() {
-    const lista = document.getElementById("listaFavoritos");
-    lista.innerHTML = "";
-    const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
-    favoritos.forEach((r, i) => {
-        const li = document.createElement("li");
-        li.innerText = `Ruta ${i+1}: (${r.origen.lat.toFixed(4)},${r.origen.lng.toFixed(4)}) -> (${r.destino.lat.toFixed(4)},${r.destino.lng.toFixed(4)})`;
-        li.addEventListener("click", () => {
-            document.getElementById("origen").value = `${r.origen.lat},${r.origen.lng}`;
-            document.getElementById("destino").value = `${r.destino.lat},${r.destino.lng}`;
-            document.getElementById("generarRuta").click();
-        });
-        lista.appendChild(li);
-    });
+function mostrarNotificacion(mensaje,clase=""){
+  const cont=document.getElementById("notificaciones");
+  const div=document.createElement("div");
+  div.className=`notificacion ${clase}`;
+  div.innerText=mensaje;
+  const btnCerrar=document.createElement("span");
+  btnCerrar.innerText=" ✖";
+  btnCerrar.style.float="right";
+  btnCerrar.style.cursor="pointer";
+  btnCerrar.style.marginLeft="10px";
+  btnCerrar.addEventListener("click",()=>{ div.remove(); });
+  div.appendChild(btnCerrar);
+  cont.appendChild(div);
+  setTimeout(()=>{ div.remove(); },4000);
 }
 
-// Cargar favoritos al iniciar
-actualizarListaFavoritos();
+// Registro voluntarios
+let totalVol=0;
+const tablaVoluntariosBody=document.querySelector("#tablaVoluntarios tbody");
+document.getElementById("formVoluntarios").addEventListener("submit",e=>{
+  e.preventDefault();
+  const nombre=document.getElementById("nombre").value;
+  const email=document.getElementById("email").value;
+  const telefono=document.getElementById("telefono").value;
+  totalVol++;
+  document.getElementById("numVoluntarios").innerText=`Voluntarios registrados: ${totalVol}`;
+  document.getElementById("mensajeRegistro").innerText="Registro exitoso ✅";
 
-// =======================
-// Sprint 2: Interactividad lista <-> marcadores
-// =======================
-puntosAccesibles.forEach((p, index) => {
-    const li = listaPuntos.children[index];
-
-    // Hover en lista -> resaltar marcador
-    li.addEventListener("mouseover", () => {
-        p.marker.setStyle({ color: "orange", radius: 15 });
-        li.classList.add("resaltado");
-    });
-    li.addEventListener("mouseout", () => {
-        let color;
-        if (p.tipo === "rampa") color = "green";
-        else if (p.tipo === "ascensor") color = "blue";
-        else color = "red";
-        p.marker.setStyle({ color: color, radius: 10 });
-        li.classList.remove("resaltado");
-    });
-
-    // Hover en marcador -> resaltar lista
-    p.marker.on("mouseover", () => {
-        li.classList.add("resaltado");
-        p.marker.setStyle({ color: "orange", radius: 15 });
-    });
-    p.marker.on("mouseout", () => {
-        li.classList.remove("resaltado");
-        let color;
-        if (p.tipo === "rampa") color = "green";
-        else if (p.tipo === "ascensor") color = "blue";
-        else color = "red";
-        p.marker.setStyle({ color: color, radius: 10 });
-    });
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${nombre}</td><td>${email}</td><td>${telefono}</td><td>
+    <button class="btn-editar">Editar</button>
+    <button class="btn-borrar">Borrar</button>
+  </td>`;
+  tablaVoluntariosBody.appendChild(tr);
+  tr.querySelector(".btn-borrar").addEventListener("click",()=>{ tr.remove(); totalVol--; document.getElementById("numVoluntarios").innerText=`Voluntarios registrados: ${totalVol}`; });
+  tr.querySelector(".btn-editar").addEventListener("click",()=>{
+    document.getElementById("nombre").value=nombre;
+    document.getElementById("email").value=email;
+    document.getElementById("telefono").value=telefono;
+    tr.remove();
+    totalVol--;
+    document.getElementById("numVoluntarios").innerText=`Voluntarios registrados: ${totalVol}`;
+  });
+  e.target.reset();
 });
 
-// =======================
-// Sprint 3: Alertas en tiempo real
-// =======================
-
-// Función para resaltar lista cuando hay alerta
-function resaltarListaAlerta(punto) {
-    const index = puntosAccesibles.indexOf(punto);
-    if (index >= 0) {
-        const li = listaPuntos.children[index];
-        li.classList.add("alerta");
-        setTimeout(() => li.classList.remove("alerta"), 3000);
-    }
-}
-
-// Función para enviar alerta
-function enviarAlerta(punto) {
-    alert(`¡Alerta! Se detectó un obstáculo en: ${punto.nombre}`);
-    punto.marker.setStyle({ color: "red", radius: 15 });
-    resaltarListaAlerta(punto);
-    setTimeout(() => {
-        let color = punto.tipo === "rampa" ? "green" : punto.tipo === "ascensor" ? "blue" : "red";
-        punto.marker.setStyle({ color: color, radius: 10 });
-    }, 3000);
-}
-
-// Simulación de alertas cada 12 segundos
-setInterval(() => {
-    const obstaculos = puntosAccesibles.filter(p => p.tipo === "obstaculo");
-    if (obstaculos.length === 0) return;
-
-    const indice = Math.floor(Math.random() * obstaculos.length);
-    const puntoAlerta = obstaculos[indice];
-    enviarAlerta(puntoAlerta);
-}, 12000);
+// Dark mode
+document.getElementById("darkModeToggle").addEventListener("click",()=>{
+  document.body.classList.toggle("dark");
+  localStorage.setItem("modoOscuro",document.body.classList.contains("dark"));
+});
+if(localStorage.getItem("modoOscuro")==="true") document.body.classList.add("dark");

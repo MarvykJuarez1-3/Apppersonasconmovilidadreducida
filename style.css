@@ -1,114 +1,128 @@
-/* ================== */
-/* Estilos generales */
-/* ================== */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  color: #333;
+  transition: 0.3s;
 }
 
+body.dark {
+  background: #222;
+  color: #fff;
+}
+
+/* ================== */
+/* Header y Menú */
 header {
-    background-color: #007BFF;
-    color: white;
-    text-align: center;
-    padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+  background: #007BFF;
+  color: white;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Contenedor principal */
-.container {
-    display: flex;
-    height: calc(100vh - 70px);
+header h1 { flex: 1 1 auto; min-width: 0; }
+header nav { flex: 1 1 auto; min-width: 0; }
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  position: relative;
 }
 
-/* Mapa */
-#map {
-    flex: 2;
-    height: 100%;
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  flex-shrink: 1;
 }
 
-/* Barra lateral */
-.sidebar {
-    flex: 1;
-    padding: 1rem;
-    background-color: #f4f4f4;
-    overflow-y: auto;
-}
+header nav ul li a.active,
+header nav ul li a:hover { background: #0056b3; }
 
-.sidebar h2 {
-    margin-top: 0;
-}
-
-.sidebar input[type="text"], .sidebar button {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-}
-
-.sidebar button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#rutaInfo {
-    margin-top: 1rem;
-    background-color: #e8e8e8;
-    padding: 0.5rem;
-    border-radius: 5px;
-}
-
-#listaPuntos, #listaFavoritos {
-    list-style: none;
-    padding-left: 0;
-}
-
-#listaPuntos li, #listaFavoritos li {
-    padding: 0.3rem 0;
-    cursor: pointer;
-}
-
-/* Resaltado de lista */
-li.resaltado {
-    background-color: #ffe066;
-}
-
-/* Resaltado de marcador */
-.leaflet-interactive.resaltado {
-    stroke: orange;
-    fill: orange;
-    r: 15 !important;
-}
-
-/* Sprint 3: alerta en lista */
-li.alerta {
-    background-color: #ff4d4d; /* rojo */
-    color: white;
+.menu-toggle {
+  display: none;
+  font-size: 2rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* ================== */
-/* Media Queries: Responsive */
-/* ================== */
-@media (max-width: 992px) {
-    .container {
-        flex-direction: column;
-        height: auto;
-    }
-    #map {
-        height: 400px;
-    }
-    .sidebar {
-        width: 100%;
-        padding: 0.5rem;
-    }
+/* Main y Secciones */
+main { padding-top: 70px; }
+.section { display: none; opacity: 0; transition: 0.3s; }
+.section.active { display: block; opacity: 1; }
+
+.card { background: white; padding: 2rem; border-radius: 10px; max-width: 400px; margin: 2rem auto; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.card:hover { transform: scale(1.02); }
+.btn-app { display: block; width: 80%; margin: 0.5rem auto; padding: 0.5rem; border: none; border-radius: 5px; background: #007BFF; color: white; cursor: pointer; }
+.btn-app:hover { background: #0056b3; transform: scale(1.05); }
+
+/* Mapa y Sidebar */
+.map-container { display: flex; flex-wrap: wrap; gap: 10px; margin: 1rem; }
+#map { flex: 2; min-height: 500px; border-radius: 10px; }
+.sidebar { flex: 1; padding: 1rem; background: #f4f4f4; overflow-y: auto; min-width: 250px; border-radius: 0 10px 10px 0; }
+
+body.dark .sidebar { background: #333; color: #fff; }
+body.dark .sidebar input, body.dark .sidebar label { background: #444; color: #fff; border: 1px solid #666; }
+
+/* Registro */
+.form-container { max-width: 600px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.form-container label { display: block; margin: 0.3rem 0; }
+.form-container input, .form-container textarea, .form-container button { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
+.form-container button { background: #007BFF; color: white; border: none; cursor: pointer; }
+.form-container button:hover { background: #0056b3; transform: scale(1.03); }
+#mensajeRegistro, #numVoluntarios { text-align: center; font-weight: bold; margin-top: 0.5rem; }
+
+#tablaVoluntarios { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+#tablaVoluntarios th, #tablaVoluntarios td { border: 1px solid #ccc; padding: 0.5rem; }
+#tablaVoluntarios th { background: #007BFF; color: white; }
+#tablaVoluntarios tr:nth-child(even) { background: #f2f2f2; }
+
+/* Notificaciones */
+#notificaciones { position: fixed; top: 80px; right: 20px; z-index: 2000; }
+.notificacion { background: #007BFF; color: white; padding: 1rem; margin-bottom: 0.5rem; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+body.dark .notificacion { background: #555; color: #fff; }
+
+/* Botón modo oscuro */
+.btn-darkmode { position: fixed; bottom: 20px; right: 20px; background: #0056b3; color: white; border: none; border-radius: 50%; padding: 0.7rem; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.btn-darkmode:hover { background: #003f7f; transform: scale(1.2); }
+
+/* Menú hamburguesa */
+@media (max-width: 1024px){
+  .menu-toggle { display: block; }
+  header nav { width: 100%; }
+  header nav ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    background: #007BFF;
+    border-radius: 0 0 10px 10px;
+    z-index: 1500;
+  }
+  header nav ul li a { padding: 1rem; }
+  header nav ul.show { display: flex; }
 }
 
-@media (max-width: 576px) {
-    #map {
-        height: 300px;
-    }
-    .sidebar input, .sidebar button {
-        font-size: 0.9rem;
-    }
-}
+@media(max-width:992px){ .map-container { flex-direction: column; } #map { min-height: 300px; } .sidebar { min-width: 100%; border-radius: 0 0 10px 10px; } }
+@media(max-width:576px){ .sidebar input, .sidebar button { font-size: 0.9rem; } }
