@@ -23,6 +23,7 @@
       <li><a href="#" data-section="inicio" class="active">Inicio</a></li>
       <li><a href="#" data-section="mapa">Mapa</a></li>
       <li><a href="#" data-section="registro">Registro</a></li>
+      <li><a href="#" data-section="conexion">Conexión Usuario-Voluntario</a></li>
     </ul>
   </nav>
 </header>
@@ -37,6 +38,7 @@
       <p>Explora rutas accesibles y registra voluntarios fácilmente.</p>
       <button class="btn-app" data-section="mapa">Ir al Mapa</button>
       <button class="btn-app" data-section="registro">Registro de Voluntarios</button>
+      <button class="btn-app" data-section="conexion">Conexión con Voluntarios</button>
     </div>
   </section>
 
@@ -84,23 +86,55 @@
       <div id="numVoluntarios">Voluntarios registrados: 0</div>
 
       <h3>Voluntarios Registrados</h3>
-      <table id="tablaVoluntarios">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="table-responsive">
+        <table id="tablaVoluntarios">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= -->
+  <!-- Sprint 5: Conexión Usuario-Voluntario -->
+  <!-- ======================= -->
+  <section id="conexion" class="section">
+    <div class="form-container">
+      <h2>Solicitar Asistencia de Voluntarios</h2>
+      <form id="formSolicitud">
+        <label for="usuarioNombre">Tu nombre:</label>
+        <input type="text" id="usuarioNombre" required>
+
+        <label for="tipoAyuda">Tipo de ayuda:</label>
+        <select id="tipoAyuda" required>
+          <option value="">Selecciona</option>
+          <option value="acompañamiento">Acompañamiento</option>
+          <option value="transporte">Transporte</option>
+          <option value="orientación">Orientación</option>
+        </select>
+
+        <label for="voluntarioSeleccionado">Voluntario:</label>
+        <select id="voluntarioSeleccionado" required>
+          <option value="">Selecciona un voluntario</option>
+        </select>
+
+        <button type="submit">Enviar Solicitud</button>
+      </form>
+
+      <h3>Solicitudes Enviadas</h3>
+      <ul id="listaSolicitudes"></ul>
     </div>
   </section>
 </main>
 
 <div id="notificaciones"></div>
-
 <button id="darkModeToggle" class="btn-darkmode" title="Modo oscuro">🌓</button>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -108,4 +142,3 @@
 <script src="app.js"></script>
 </body>
 </html>
-

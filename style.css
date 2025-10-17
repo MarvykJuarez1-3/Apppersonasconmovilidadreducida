@@ -1,3 +1,6 @@
+/* ======================= */
+/* General y Sprint 1: Header y Menú */
+/* ======================= */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -6,21 +9,14 @@ body {
   color: #333;
   transition: 0.3s;
 }
+body.dark { background: #222; color: #fff; }
 
-body.dark {
-  background: #222;
-  color: #fff;
-}
-
-/* ================== */
-/* Header y Menú */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 0.5rem 1rem;
-  box-sizing: border-box;
   background: #007BFF;
   color: white;
   position: fixed;
@@ -29,10 +25,8 @@ header {
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
 header h1 { flex: 1 1 auto; min-width: 0; }
 header nav { flex: 1 1 auto; min-width: 0; }
-
 header nav ul {
   list-style: none;
   display: flex;
@@ -40,9 +34,7 @@ header nav ul {
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
-  position: relative;
 }
-
 header nav ul li a {
   color: white;
   text-decoration: none;
@@ -51,61 +43,53 @@ header nav ul li a {
   white-space: nowrap;
   flex-shrink: 1;
 }
-
 header nav ul li a.active,
 header nav ul li a:hover { background: #0056b3; }
+.menu-toggle { display: none; font-size: 2rem; color: white; background: none; border: none; cursor: pointer; }
 
-.menu-toggle {
-  display: none;
-  font-size: 2rem;
-  color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* ================== */
-/* Main y Secciones */
-main { padding-top: 70px; }
+/* ======================= */
+/* Sprint 1 y 2: Main y Secciones */
+main { padding-top: 80px; }
 .section { display: none; opacity: 0; transition: 0.3s; }
 .section.active { display: block; opacity: 1; }
-
 .card { background: white; padding: 2rem; border-radius: 10px; max-width: 400px; margin: 2rem auto; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .card:hover { transform: scale(1.02); }
 .btn-app { display: block; width: 80%; margin: 0.5rem auto; padding: 0.5rem; border: none; border-radius: 5px; background: #007BFF; color: white; cursor: pointer; }
 .btn-app:hover { background: #0056b3; transform: scale(1.05); }
 
-/* Mapa y Sidebar */
+/* ======================= */
+/* Sprint 2: Mapa y Sidebar */
 .map-container { display: flex; flex-wrap: wrap; gap: 10px; margin: 1rem; }
 #map { flex: 2; min-height: 500px; border-radius: 10px; }
 .sidebar { flex: 1; padding: 1rem; background: #f4f4f4; overflow-y: auto; min-width: 250px; border-radius: 0 10px 10px 0; }
-
 body.dark .sidebar { background: #333; color: #fff; }
 body.dark .sidebar input, body.dark .sidebar label { background: #444; color: #fff; border: 1px solid #666; }
 
-/* Registro */
+/* ======================= */
+/* Sprint 4: Registro Voluntarios */
 .form-container { max-width: 600px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .form-container label { display: block; margin: 0.3rem 0; }
-.form-container input, .form-container textarea, .form-container button { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
+.form-container input, .form-container textarea, .form-container select, .form-container button { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
 .form-container button { background: #007BFF; color: white; border: none; cursor: pointer; }
 .form-container button:hover { background: #0056b3; transform: scale(1.03); }
-#mensajeRegistro, #numVoluntarios { text-align: center; font-weight: bold; margin-top: 0.5rem; }
 
+#mensajeRegistro, #numVoluntarios { text-align: center; font-weight: bold; margin-top: 0.5rem; }
+.table-responsive { overflow-x: auto; }
 #tablaVoluntarios { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-#tablaVoluntarios th, #tablaVoluntarios td { border: 1px solid #ccc; padding: 0.5rem; }
+#tablaVoluntarios th, #tablaVoluntarios td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
 #tablaVoluntarios th { background: #007BFF; color: white; }
 #tablaVoluntarios tr:nth-child(even) { background: #f2f2f2; }
 
-/* Notificaciones */
+/* ======================= */
+/* Notificaciones y Dark Mode */
 #notificaciones { position: fixed; top: 80px; right: 20px; z-index: 2000; }
 .notificacion { background: #007BFF; color: white; padding: 1rem; margin-bottom: 0.5rem; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 body.dark .notificacion { background: #555; color: #fff; }
-
-/* Botón modo oscuro */
 .btn-darkmode { position: fixed; bottom: 20px; right: 20px; background: #0056b3; color: white; border: none; border-radius: 50%; padding: 0.7rem; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
 .btn-darkmode:hover { background: #003f7f; transform: scale(1.2); }
 
-/* Menú hamburguesa */
+/* ======================= */
+/* Menú hamburguesa responsive */
 @media (max-width: 1024px){
   .menu-toggle { display: block; }
   header nav { width: 100%; }
@@ -123,6 +107,36 @@ body.dark .notificacion { background: #555; color: #fff; }
   header nav ul li a { padding: 1rem; }
   header nav ul.show { display: flex; }
 }
-
 @media(max-width:992px){ .map-container { flex-direction: column; } #map { min-height: 300px; } .sidebar { min-width: 100%; border-radius: 0 0 10px 10px; } }
 @media(max-width:576px){ .sidebar input, .sidebar button { font-size: 0.9rem; } }
+
+/* ======================= */
+/* Sprint 5: Conexión Usuario-Voluntario */
+#formSolicitud label, #formSolicitud input, #formSolicitud select, #formSolicitud button {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+#formSolicitud button {
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+#formSolicitud button:hover {
+  background: #218838;
+  transform: scale(1.03);
+}
+#listaSolicitudes { list-style: none; padding: 0; }
+#listaSolicitudes li {
+  background: #f4f4f4;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  position: relative;
+}
+body.dark #listaSolicitudes li { background: #444; color: #fff; }
+#listaSolicitudes li span { position: absolute; right: 10px; cursor: pointer; }
