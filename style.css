@@ -1,142 +1,172 @@
-/* ======================= */
-/* General y Sprint 1: Header y Menú */
-/* ======================= */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f9f9f9;
-  color: #333;
-  transition: 0.3s;
-}
-body.dark { background: #222; color: #fff; }
+/* ============================
+style.css - Sprints 1 a 6
+============================ */
 
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 0.5rem 1rem;
-  background: #007BFF;
-  color: white;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+/* ============================
+BASE Y VARIABLES - Sprint 1
+============================ */
+:root{
+  --bg-light:#f0f4f8;
+  --bg-dark:#0b1117;
+  --card-light:#fff;
+  --card-dark:#1c1f24;
+  --primary:#0b6fa4;
+  --primary-dark:#063b5b;
+  --accent:#ffb703;
+  --accent-light:#ffd86b;
+  --muted:#6b7280;
+  --text-light:#042639;
+  --text-dark:#e6e8ea;
+  --radius:16px;
+  --shadow:0 6px 24px rgba(15,23,42,0.15);
+  --shadow-hover:0 10px 36px rgba(15,23,42,0.25);
+  --transition:all 0.3s ease;
 }
-header h1 { flex: 1 1 auto; min-width: 0; }
-header nav { flex: 1 1 auto; min-width: 0; }
-header nav ul {
-  list-style: none;
-  display: flex;
-  gap: 0.3rem;
-  margin: 0;
-  padding: 0;
-  flex-wrap: wrap;
-}
-header nav ul li a {
-  color: white;
-  text-decoration: none;
-  padding: 0.4rem 0.6rem;
-  border-radius: 5px;
-  white-space: nowrap;
-  flex-shrink: 1;
-}
-header nav ul li a.active,
-header nav ul li a:hover { background: #0056b3; }
-.menu-toggle { display: none; font-size: 2rem; color: white; background: none; border: none; cursor: pointer; }
 
-/* ======================= */
-/* Sprint 1 y 2: Main y Secciones */
-main { padding-top: 80px; }
-.section { display: none; opacity: 0; transition: 0.3s; }
-.section.active { display: block; opacity: 1; }
-.card { background: white; padding: 2rem; border-radius: 10px; max-width: 400px; margin: 2rem auto; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.card:hover { transform: scale(1.02); }
-.btn-app { display: block; width: 80%; margin: 0.5rem auto; padding: 0.5rem; border: none; border-radius: 5px; background: #007BFF; color: white; cursor: pointer; }
-.btn-app:hover { background: #0056b3; transform: scale(1.05); }
+/* ============================
+GENERAL - Sprint 1
+============================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg-light);color:var(--text-light);transition:var(--transition);scroll-behavior:smooth}
+body.dark{background:var(--bg-dark);color:var(--text-dark)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#e6e6e6;border-radius:8px}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
 
-/* ======================= */
-/* Sprint 2: Mapa y Sidebar */
-.map-container { display: flex; flex-wrap: wrap; gap: 10px; margin: 1rem; }
-#map { flex: 2; min-height: 500px; border-radius: 10px; }
-.sidebar { flex: 1; padding: 1rem; background: #f4f4f4; overflow-y: auto; min-width: 250px; border-radius: 0 10px 10px 0; }
-body.dark .sidebar { background: #333; color: #fff; }
-body.dark .sidebar input, body.dark .sidebar label { background: #444; color: #fff; border: 1px solid #666; }
-
-/* ======================= */
-/* Sprint 4: Registro Voluntarios */
-.form-container { max-width: 600px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.form-container label { display: block; margin: 0.3rem 0; }
-.form-container input, .form-container textarea, .form-container select, .form-container button { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-.form-container button { background: #007BFF; color: white; border: none; cursor: pointer; }
-.form-container button:hover { background: #0056b3; transform: scale(1.03); }
-
-#mensajeRegistro, #numVoluntarios { text-align: center; font-weight: bold; margin-top: 0.5rem; }
-.table-responsive { overflow-x: auto; }
-#tablaVoluntarios { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-#tablaVoluntarios th, #tablaVoluntarios td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
-#tablaVoluntarios th { background: #007BFF; color: white; }
-#tablaVoluntarios tr:nth-child(even) { background: #f2f2f2; }
-
-/* ======================= */
-/* Notificaciones y Dark Mode */
-#notificaciones { position: fixed; top: 80px; right: 20px; z-index: 2000; }
-.notificacion { background: #007BFF; color: white; padding: 1rem; margin-bottom: 0.5rem; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-body.dark .notificacion { background: #555; color: #fff; }
-.btn-darkmode { position: fixed; bottom: 20px; right: 20px; background: #0056b3; color: white; border: none; border-radius: 50%; padding: 0.7rem; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-.btn-darkmode:hover { background: #003f7f; transform: scale(1.2); }
-
-/* ======================= */
-/* Menú hamburguesa responsive */
-@media (max-width: 1024px){
-  .menu-toggle { display: block; }
-  header nav { width: 100%; }
-  header nav ul {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    display: none;
-    flex-direction: column;
-    gap: 0;
-    background: #007BFF;
-    border-radius: 0 0 10px 10px;
-    z-index: 1500;
-  }
-  header nav ul li a { padding: 1rem; }
-  header nav ul.show { display: flex; }
+/* ============================
+HEADER / NAV - Sprint 1 y 2
+============================ */
+.site-header{
+  position:fixed;top:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 20px;
+  background:var(--primary);color:white;
+  z-index:1200;box-shadow:var(--shadow);transition:var(--transition)
 }
-@media(max-width:992px){ .map-container { flex-direction: column; } #map { min-height: 300px; } .sidebar { min-width: 100%; border-radius: 0 0 10px 10px; } }
-@media(max-width:576px){ .sidebar input, .sidebar button { font-size: 0.9rem; } }
+body.dark .site-header{background:var(--primary-dark)}
+.brand .site-title{font-size:20px;font-weight:600;letter-spacing:0.5px}
+.nav-list{list-style:none;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.nav-list li{flex-shrink:0}
+.nav-link{color:white;padding:10px 14px;border-radius:12px;font-weight:500;transition:var(--transition);text-decoration:none;display:inline-block}
+.nav-link:hover{box-shadow:0 0 10px var(--accent);transform:scale(1.03)}
+.nav-link.active{background:var(--primary-dark);color:#fff;font-weight:600;box-shadow:inset 0 0 8px var(--accent)}
+.hamburger{display:none;font-size:24px;background:transparent;border:none;color:white;cursor:pointer;}
 
-/* ======================= */
-/* Sprint 5: Conexión Usuario-Voluntario */
-#formSolicitud label, #formSolicitud input, #formSolicitud select, #formSolicitud button {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+/* ============================
+HERO / FEATURES - Sprint 2
+============================ */
+.hero-section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:120px 20px 40px;background:linear-gradient(135deg,#f0f4f8 0%,#e1e8ed 50%,#d1d9e0 100%)}
+body.dark .hero-section{background:linear-gradient(135deg,#1b1e23 0%,#14171c 100%)}
+.hero{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:50px;max-width:1100px}
+.hero-info{max-width:520px;text-align:left}
+.hero-info h2{font-size:44px;color:var(--primary);margin-bottom:10px}
+body.dark .hero-info h2{color:var(--accent)}
+.hero-info p{font-size:18px;color:var(--text-light);line-height:1.5}
+body.dark .hero-info p{color:var(--text-dark)}
+.hero-buttons{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px}
+.hero-image img{width:260px;transition:transform 0.3s ease,filter 0.3s ease}
+.hero-image img:hover{transform:scale(1.05);filter:drop-shadow(0 0 15px var(--accent))}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:1000px;margin-top:50px}
+.feature-card{background:var(--card-light);padding:24px;border-radius:var(--radius);text-align:center;box-shadow:var(--shadow);transition:var(--transition);cursor:pointer}
+body.dark .feature-card{background:var(--card-dark)}
+.feature-card:hover{transform:translateY(-5px);box-shadow:0 0 20px var(--accent)}
+.feature-img{width:64px;margin-bottom:10px;transition:var(--transition)}
+.feature-img:hover{filter:drop-shadow(0 0 10px var(--accent));transform:scale(1.1)}
+.feature-card h3{color:var(--primary);font-size:20px;margin:10px 0 6px}
+body.dark .feature-card h3{color:var(--accent)}
+.feature-card p{color:var(--muted)}
+body.dark .feature-card p{color:var(--text-dark)}
+
+/* ============================
+MAIN / SECCIONES - Sprint 2
+============================ */
+main{padding:100px 20px 32px;max-width:1200px;margin:0 auto}
+.section{display:none;opacity:0;transition:opacity 0.3s ease}
+.section.active{display:block;opacity:1}
+.card{background:var(--card-light);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);transition:var(--transition)}
+body.dark .card{background:var(--card-dark);color:var(--text-dark)}
+h2{color:var(--primary);margin-bottom:12px}
+
+/* ============================
+BOTONES - Sprint 4
+============================ */
+.btn{display:inline-block;padding:12px 20px;border-radius:12px;border:2px solid transparent;cursor:pointer;font-weight:500;transition:var(--transition)}
+.btn-primary{background:var(--primary);color:white;border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-dark);box-shadow:0 0 10px var(--accent)}
+.btn-secondary{background:#f4f7fb;color:var(--text-light);border-color:#dfe6ee}
+.btn-secondary:hover{background:#e9eef4;box-shadow:0 0 10px var(--accent)}
+.btn-outline{background:transparent;color:var(--primary);border-color:var(--primary)}
+.btn-cancel{background:#fff;color:#666;border:2px solid #ccc}
+.btn-cancel:hover{background:#eee;box-shadow:0 0 8px var(--accent-light)}
+
+/* ============================
+MAPA / FILTROS - Sprint 5 y 6
+============================ */
+.map-wrapper{display:grid;grid-template-columns:1fr;gap:20px;position:relative}
+.map{height:70vh;width:100%;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+
+/* Filtros debajo del mapa */
+.map-filters-bottom{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:12px;
 }
-#formSolicitud button {
-  background: #28a745;
-  color: white;
-  border: none;
-  cursor: pointer;
+.map-filters-bottom label{
+  background: var(--card-light);
+  padding: 6px 12px;
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
 }
-#formSolicitud button:hover {
-  background: #218838;
-  transform: scale(1.03);
+body.dark .map-filters-bottom label{
+  background: var(--card-dark);
+  color: var(--text-dark);
 }
-#listaSolicitudes { list-style: none; padding: 0; }
-#listaSolicitudes li {
-  background: #f4f4f4;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 5px;
-  position: relative;
+
+/* ============================
+MODALES Y ALERTAS - Sprint 3
+============================ */
+.modal.hidden{display:none}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:3000}
+.modal-content{background:var(--card-light);color:var(--text-light);padding:24px;border-radius:16px;width:90%;max-width:460px;box-shadow:var(--shadow-hover);max-height:85vh;overflow-y:auto;animation:fadeIn 0.28s ease}
+body.dark .modal-content{background:var(--card-dark);color:var(--text-dark)}
+.modal-content h3{text-align:center;color:var(--primary);margin-bottom:10px}
+body.dark .modal-content h3{color:var(--accent)}
+.modal-content label{display:block;margin-top:10px;font-weight:500}
+.modal-content input{width:100%;padding:10px;border-radius:10px;border:2px solid #dfe6ee;margin-top:5px}
+.modal-actions{display:flex;justify-content:space-between;margin-top:18px}
+.modal-content::-webkit-scrollbar-thumb{background:var(--accent)}
+.modal-content::-webkit-scrollbar-thumb:hover{background:var(--accent-light)}
+
+.alerta{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#000;padding:12px 20px;border-radius:8px;box-shadow:var(--shadow);font-weight:600;z-index:2000;transition:opacity 0.3s}
+.alerta.hidden{opacity:0;pointer-events:none}
+
+.list-puntos{list-style:none;padding:0;margin:0}
+.list-puntos li{background:var(--card-light);border-radius:10px;padding:10px 14px;margin-bottom:10px;box-shadow:var(--shadow);transition:var(--transition)}
+body.dark .list-puntos li{background:var(--card-dark);color:var(--text-dark)}
+.list-puntos li:hover{transform:translateY(-3px);box-shadow:0 0 10px var(--accent)}
+
+@keyframes fadeIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+
+/* ============================
+RESPONSIVE - Sprint 4
+============================ */
+@media(max-width:768px){
+  .hamburger{display:block}
+  nav{position:absolute;top:64px;left:0;width:100%;background:var(--primary);flex-direction:column;display:none;transition:all 0.3s}
+  nav.open{display:flex}
+  .nav-list{flex-direction:column;gap:0;padding:0}
+  .nav-list li{width:100%;text-align:center;margin:0}
+  .hero{flex-direction:column;text-align:center}
+  .hero-info{text-align:center}
+  .hero-image img{width:180px}
 }
-body.dark #listaSolicitudes li { background: #444; color: #fff; }
-#listaSolicitudes li span { position: absolute; right: 10px; cursor: pointer; }
+
+/* ============================
+FIN style.css
+============================ */

@@ -1,229 +1,196 @@
-// =======================
-// Sprint 1: Navegación entre secciones y menú hamburguesa
-// =======================
-const sections = document.querySelectorAll(".section");
-const navLinks = document.querySelectorAll("header nav ul li a");
-const navList = document.getElementById("navList");
+// ============================
+// app.js - Sprints 1 a 6
+// ============================
 
-function mostrarSeccion(id){
-  // Mostrar solo la sección seleccionada
-  sections.forEach(sec => sec.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+/* ============================
+UTILIDADES - Sprint 1
+============================ */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-  // Resaltar solo el enlace activo
-  navLinks.forEach(link => link.classList.remove("active"));
-  const link = document.querySelector(`a[data-section="${id}"]`);
-  if(link) link.classList.add("active");
+/* ============================
+NAVEGACIÓN - Sprint 2
+============================ */
+function activateNavLinkBySection(sectionId) {
+  $$('.nav-link').forEach(a => a.classList.remove('active'));
+  const nav = $(`.nav-link[data-section="${sectionId}"]`);
+  if(nav) nav.classList.add('active');
+}
 
-  // Ajuste para mapa
-  if(id==="mapa") setTimeout(()=>{ map.invalidateSize(); },100);
-
-  // Cerrar menú hamburguesa en móvil
-  if(navList.classList.contains("show")){
-    navList.classList.remove("show");
+function showSection(sectionId){
+  $$('.section').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById(sectionId);
+  if(target) target.classList.add('active');
+  activateNavLinkBySection(sectionId);
+  if(sectionId==='mapa' && typeof map!=='undefined'){
+    setTimeout(()=>map.invalidateSize && map.invalidateSize(),300);
   }
 }
 
-// Click en enlaces del menú
-navLinks.forEach(link=>{
-  link.addEventListener("click", e=>{
-    e.preventDefault();
-    mostrarSeccion(link.dataset.section);
+// Click centralizado para secciones, acciones y feature cards
+document.addEventListener('click', e=>{
+  const link=e.target.closest('[data-section],[data-action],.feature-card,.hero-link,.btn[data-action]');
+  if(!link) return;
+  e.preventDefault();
+
+  if(link.dataset.section) showSection(link.dataset.section);
+
+  if(link.dataset.action){
+    if(link.dataset.action==='registro') abrirModal('modalRegistro');
+    if(link.dataset.action==='login') abrirModal('modalLogin');
+    if(link.dataset.action==='privacidad') abrirModal('modalPrivacidad');
+  }
+
+  if(link.classList.contains('feature-card') || link.classList.contains('hero-link')){
+    const sec=link.dataset.section;
+    if(sec) showSection(sec);
+  }
+});
+
+// Feature cards: reaccionan a Enter y Espacio
+$$('.feature-card').forEach(card=>{
+  card.addEventListener('keydown', ev=>{
+    if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); const sec=card.dataset.section; if(sec) showSection(sec);}
   });
 });
 
-// Click en botones internos
-document.querySelectorAll(".btn-app").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    mostrarSeccion(btn.dataset.section);
-    if(navList.classList.contains("show")){
-      navList.classList.remove("show");
-    }
-  });
+/* ============================
+MODALES - Sprint 3
+============================ */
+function abrirModal(id){
+  const m=document.getElementById(id);
+  if(!m) return;
+  m.classList.remove('hidden');
+  m.setAttribute('aria-hidden','false');
+  const first=m.querySelector('input,button,select,textarea');
+  if(first) first.focus();
+}
+
+function cerrarModal(id){
+  const m=document.getElementById(id);
+  if(!m) return;
+  m.classList.add('hidden');
+  m.setAttribute('aria-hidden','true');
+}
+
+// Botones de cerrar modales
+$('#cancelarRegistro')?.addEventListener('click',()=>cerrarModal('modalRegistro'));
+$('#cancelarLogin')?.addEventListener('click',()=>cerrarModal('modalLogin'));
+$('#cerrarPrivacidad')?.addEventListener('click',()=>cerrarModal('modalPrivacidad'));
+
+// Cerrar modales con ESC
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') $$('.modal').forEach(m=>cerrarModal(m.id));
 });
 
-// Menú hamburguesa toggle
-const menuToggle = document.getElementById("menuToggle");
-menuToggle.addEventListener("click", ()=>{ navList.classList.toggle("show"); });
+/* ============================
+MODO OSCURO - Sprint 4
+============================ */
+const darkBtn=$('#btnDarkMode');
+darkBtn.addEventListener('click',()=>{
+  document.body.classList.toggle('dark');
+  darkBtn.setAttribute('aria-pressed', document.body.classList.contains('dark'));
+});
 
+/* ============================
+HAMBURGUESA RESPONSIVE - Sprint 4
+============================ */
+const btnMenu=$('#btnMenu');
+const nav=document.querySelector('nav');
+btnMenu.addEventListener('click',()=>nav.classList.toggle('open'));
+$$('.nav-link').forEach(link=>link.addEventListener('click',()=>{if(nav.classList.contains('open')) nav.classList.remove('open')}));
 
-// =======================
-// Sprint 2: Mapa y clusters
-// =======================
-const map = L.map('map').setView([19.4326,-99.1332],13);
+/* ============================
+MAPA LEAFLET - Sprint 5
+============================ */
+const map=L.map('map').setView([19.4326,-99.1332],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-  attribution:'&copy; OpenStreetMap contributors'
+  maxZoom:19, attribution:'&copy; OpenStreetMap'
 }).addTo(map);
 
-const markersCluster = L.markerClusterGroup().addTo(map);
-
-const puntosAccesibles = [
-  {nombre:"Rampa Central",lat:19.4326,lon:-99.1332,tipo:"rampa",color:"green"},
-  {nombre:"Ascensor Plaza",lat:19.4270,lon:-99.1677,tipo:"ascensor",color:"blue"},
-  {nombre:"Obstáculo Temporal",lat:19.4350,lon:-99.1400,tipo:"obstaculo",color:"red"}
+/* ============================
+MARKERS / PUNTOS - Sprint 5
+============================ */
+const puntos=[
+  {id:1, tipo:'rampa', lat:19.433, lon:-99.14, nombre:'Rampa accesible - Reforma'},
+  {id:2, tipo:'ascensor', lat:19.436, lon:-99.14, nombre:'Ascensor público - Metro Hidalgo'},
+  {id:3, tipo:'obstaculo', lat:19.43, lon:-99.13, nombre:'Escalera sin rampa - Eje Central'}
 ];
 
-const lista = document.getElementById("listaPuntos");
-puntosAccesibles.forEach(p=>{
-  const icon = L.icon({
-    iconUrl:`https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${p.color.replace("#","")}`,
-    iconSize:[21,34],
-    iconAnchor:[10,34],
-    popupAnchor:[0,-28]
-  });
-  p.marker = L.marker([p.lat,p.lon], {icon}).bindPopup(`${p.nombre} (${p.tipo})`);
-  markersCluster.addLayer(p.marker);
+const iconos={
+  rampa:L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/512/535/535239.png',iconSize:[34,34],iconAnchor:[17,34]}),
+  ascensor:L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/512/854/854878.png',iconSize:[34,34],iconAnchor:[17,34]}),
+  obstaculo:L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/512/565/565547.png',iconSize:[34,34],iconAnchor:[17,34]})
+};
 
-  const li = document.createElement("li");
-  li.innerText = `${p.nombre} (${p.tipo})`;
-  li.addEventListener("mouseover", ()=>{ p.marker.openPopup(); li.classList.add("resaltado"); });
-  li.addEventListener("mouseout", ()=>{ p.marker.closePopup(); li.classList.remove("resaltado"); });
-  lista.appendChild(li);
-});
+const markers=L.markerClusterGroup();
 
-const checkboxes = document.querySelectorAll(".sidebar input[type=checkbox]");
-checkboxes.forEach(cb=>{
-  cb.addEventListener("change", ()=>{
-    const selected = Array.from(checkboxes).filter(c=>c.checked).map(c=>c.value);
-    markersCluster.clearLayers();
-    puntosAccesibles.forEach(p=>{ if(selected.includes(p.tipo)) markersCluster.addLayer(p.marker); });
-  });
-});
-
-
-// =======================
-// Sprint 3: Alertas e historial
-// =======================
-const historialAlertas = document.getElementById("historialAlertas");
-
-function revisarObstaculos(){
-  puntosAccesibles.forEach(p=>{
-    if(p.tipo === "obstaculo"){
-      const mensaje = `¡Alerta! Obstáculo detectado en ${p.nombre}`;
-      mostrarNotificacion(mensaje,"alerta-roja");
-      const li = document.createElement("li");
-      li.innerText = mensaje;
-      const btnCerrar = document.createElement("span");
-      btnCerrar.innerText = " ✖";
-      btnCerrar.style.cursor = "pointer";
-      btnCerrar.style.marginLeft = "10px";
-      btnCerrar.addEventListener("click", ()=>{ li.remove(); });
-      li.appendChild(btnCerrar);
-      historialAlertas.prepend(li);
+// Función para renderizar markers según filtros
+function renderMarkers(selectedTypes=['rampa','ascensor','obstaculo']){
+  markers.clearLayers();
+  puntos.forEach(p=>{
+    if(selectedTypes.includes(p.tipo)){
+      const mk=L.marker([p.lat,p.lon],{icon:iconos[p.tipo],title:p.nombre})
+        .bindPopup(`<strong>${p.nombre}</strong><br>Tipo: ${p.tipo}`);
+      mk.puntoId=p.id;
+      markers.addLayer(mk);
     }
   });
+  map.addLayer(markers);
 }
 
-setInterval(revisarObstaculos,10000);
+/* ============================
+FILTROS MAPA - Sprint 6
+============================ */
+$$('.map-filters input[type=checkbox]').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    const selected=$$('.map-filters input[type=checkbox]').filter(c=>c.checked).map(c=>c.value);
+    renderMarkers(selected);
+  });
+});
+renderMarkers(); // render inicial
 
-function mostrarNotificacion(mensaje,clase=""){
-  const cont = document.getElementById("notificaciones");
-  const div = document.createElement("div");
-  div.className = `notificacion ${clase}`;
-  div.innerText = mensaje;
-  const btnCerrar = document.createElement("span");
-  btnCerrar.innerText = " ✖";
-  btnCerrar.style.float = "right";
-  btnCerrar.style.cursor = "pointer";
-  btnCerrar.style.marginLeft = "10px";
-  btnCerrar.addEventListener("click", ()=>{ div.remove(); });
-  div.appendChild(btnCerrar);
-  cont.appendChild(div);
-  setTimeout(()=>{ div.remove(); },4000);
+/* ============================
+ALERTAS / PROXIMIDAD - Sprint 5
+============================ */
+const alertaEl=$('#alertaPopup');
+let lastAlertFor=null;
+function showAlert(text){alertaEl.textContent=text;alertaEl.classList.remove('hidden');clearTimeout(alertaEl._timeout);alertaEl._timeout=setTimeout(()=>alertaEl.classList.add('hidden'),7000);}
+function checkProximity(lat,lon){
+  for(const p of puntos){
+    const d=Math.hypot(p.lat-lat,p.lon-lon);
+    if(d<0.0012){if(lastAlertFor!==p.id){lastAlertFor=p.id;showAlert(`⚠️ ¡Atención! Cerca de ${p.tipo.toUpperCase()}: ${p.nombre}`)}return true;}
+  }
+  lastAlertFor=null;return false;
+}
+if('geolocation' in navigator){
+  navigator.geolocation.watchPosition(pos=>{checkProximity(pos.coords.latitude,pos.coords.longitude)},
+    err=>console.warn('Geolocalización no disponible',err),
+    {enableHighAccuracy:true,maximumAge:30000,timeout:10000});
 }
 
-
-// =======================
-// Sprint 4: Registro voluntarios
-// =======================
-let totalVol = 0;
-const tablaVoluntariosBody = document.querySelector("#tablaVoluntarios tbody");
-
-document.getElementById("formVoluntarios").addEventListener("submit", e=>{
+/* ============================
+FORMULARIOS SIMULADOS - Sprint 3
+============================ */
+$('#formRegistro').addEventListener('submit', e=>{
   e.preventDefault();
-  const nombre = document.getElementById("nombre").value;
-  const email = document.getElementById("email").value;
-  const telefono = document.getElementById("telefono").value;
-  totalVol++;
-  document.getElementById("numVoluntarios").innerText = `Voluntarios registrados: ${totalVol}`;
-  document.getElementById("mensajeRegistro").innerText = "Registro exitoso ✅";
-
-  const tr = document.createElement("tr");
-  tr.innerHTML = `<td>${nombre}</td><td>${email}</td><td>${telefono}</td><td>
-    <button class="btn-editar">Editar</button>
-    <button class="btn-borrar">Borrar</button>
-  </td>`;
-  tablaVoluntariosBody.appendChild(tr);
-
-  tr.querySelector(".btn-borrar").addEventListener("click", ()=>{
-    tr.remove(); totalVol--;
-    document.getElementById("numVoluntarios").innerText = `Voluntarios registrados: ${totalVol}`;
-    sincronizarVoluntarios();
-  });
-
-  tr.querySelector(".btn-editar").addEventListener("click", ()=>{
-    document.getElementById("nombre").value = nombre;
-    document.getElementById("email").value = email;
-    document.getElementById("telefono").value = telefono;
-    tr.remove(); totalVol--;
-    document.getElementById("numVoluntarios").innerText = `Voluntarios registrados: ${totalVol}`;
-    sincronizarVoluntarios();
-  });
-
-  e.target.reset();
-  sincronizarVoluntarios();
+  cerrarModal('modalRegistro');
+  setTimeout(()=>abrirModal('modalLogin'),250);
 });
-
-
-// =======================
-// Sprint 5: Conexión Usuario-Voluntario
-// =======================
-const voluntarios = [];
-const selectVoluntario = document.getElementById("voluntarioSeleccionado");
-const listaSolicitudes = document.getElementById("listaSolicitudes");
-
-function actualizarVoluntarios(){
-  selectVoluntario.innerHTML = '<option value="">Selecciona un voluntario</option>';
-  voluntarios.forEach((v,i)=>{ selectVoluntario.innerHTML += `<option value="${i}">${v.nombre}</option>`; });
-}
-
-function sincronizarVoluntarios(){
-  voluntarios.length = 0;
-  const filas = document.querySelectorAll("#tablaVoluntarios tbody tr");
-  filas.forEach(f=>{
-    voluntarios.push({
-      nombre: f.children[0].innerText,
-      email: f.children[1].innerText,
-      telefono: f.children[2].innerText
-    });
-  });
-  actualizarVoluntarios();
-}
-
-document.getElementById("formSolicitud").addEventListener("submit", e=>{
+$('#formLogin').addEventListener('submit', e=>{
   e.preventDefault();
-  const usuario = document.getElementById("usuarioNombre").value;
-  const tipo = document.getElementById("tipoAyuda").value;
-  const voluntarioIndex = document.getElementById("voluntarioSeleccionado").value;
-  if(voluntarioIndex === "") return;
-
-  const voluntario = voluntarios[voluntarioIndex];
-  const li = document.createElement("li");
-  li.innerHTML = `<strong>${usuario}</strong> solicita <em>${tipo}</em> a <strong>${voluntario.nombre}</strong><span> ✖</span>`;
-  listaSolicitudes.prepend(li);
-
-  // Simular respuesta del voluntario
-  setTimeout(()=>{ mostrarNotificacion(`El voluntario ${voluntario.nombre} aceptó tu solicitud ✅`); }, 1500);
-
-  li.querySelector("span").addEventListener("click", ()=>li.remove());
-  e.target.reset();
+  cerrarModal('modalLogin');
+  alert('Inicio de sesión exitoso. ¡Bienvenido!');
 });
 
-// =======================
-// Dark mode
-// =======================
-document.getElementById("darkModeToggle").addEventListener("click", ()=>{
-  document.body.classList.toggle("dark");
-  localStorage.setItem("modoOscuro", document.body.classList.contains("dark"));
+/* ============================
+INICIALIZACIÓN - Sprint 1
+============================ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  showSection('inicio');
+  $('#main')?.setAttribute('tabindex','-1');
 });
-if(localStorage.getItem("modoOscuro") === "true") document.body.classList.add("dark");
+
+// ============================
+// FIN app.js
+// ============================

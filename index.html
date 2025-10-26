@@ -1,144 +1,176 @@
-<!DOCTYPE html>
+<!-- ============================
+index.html - Sprints 1 a 6
+============================ -->
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movilidad Reducida App - Pro Final</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movilidad Reducida — App</title>
 
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 </head>
+
 <body>
 
-<!-- ======================= -->
-<!-- Sprint 1: Header y Menú -->
-<!-- ======================= -->
-<header>
-  <h1>Movilidad Reducida</h1>
-  <button id="menuToggle" class="menu-toggle" aria-label="Menú">&#9776;</button>
-  <nav>
-    <ul id="navList">
-      <li><a href="#" data-section="inicio" class="active">Inicio</a></li>
-      <li><a href="#" data-section="mapa">Mapa</a></li>
-      <li><a href="#" data-section="registro">Registro</a></li>
-      <li><a href="#" data-section="conexion">Conexión Usuario-Voluntario</a></li>
-    </ul>
-  </nav>
-</header>
+  <!-- ============================
+  HEADER / NAV - Sprint 1
+  ============================ -->
+  <header class="site-header" role="banner">
+    <div class="brand"><h1 class="site-title">Movilidad Reducida</h1></div>
+    <button id="btnMenu" class="btn btn-outline hamburger" aria-label="Abrir menú">☰</button>
+    <nav role="navigation" aria-label="Navegación principal">
+      <ul class="nav-list">
+        <!-- Sprint 2 - Secciones -->
+        <li><a href="#" class="nav-link" data-section="inicio" aria-current="page">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-section="mapa">Mapa</a></li>
+        <li><a href="#" class="nav-link" data-section="historial">Historial</a></li>
+        <li><a href="#" class="nav-link" data-section="favoritos">Favoritos</a></li>
 
-<main>
-  <!-- ======================= -->
-  <!-- Sprint 1: Inicio -->
-  <!-- ======================= -->
-  <section id="inicio" class="section active">
-    <div class="card">
-      <h2>Bienvenido</h2>
-      <p>Explora rutas accesibles y registra voluntarios fácilmente.</p>
-      <button class="btn-app" data-section="mapa">Ir al Mapa</button>
-      <button class="btn-app" data-section="registro">Registro de Voluntarios</button>
-      <button class="btn-app" data-section="conexion">Conexión con Voluntarios</button>
-    </div>
-  </section>
+        <!-- Sprint 3 - Acciones -->
+        <li><a href="#" class="nav-link action-link" data-action="registro">Registro</a></li>
+        <li><a href="#" class="nav-link action-link" data-action="login">Iniciar Sesión</a></li>
+        <li><a href="#" class="nav-link action-link" data-action="privacidad">Aviso de Privacidad</a></li>
 
-  <!-- ======================= -->
-  <!-- Sprint 2: Mapa -->
-  <!-- ======================= -->
-  <section id="mapa" class="section">
-    <div class="map-container">
-      <div id="map"></div>
-      <div class="sidebar">
-        <h2>Puntos Accesibles</h2>
-        <ul id="listaPuntos"></ul>
-        <h3>Filtros</h3>
-        <label><input type="checkbox" value="rampa" checked> Rampa</label>
-        <label><input type="checkbox" value="ascensor" checked> Ascensor</label>
-        <label><input type="checkbox" value="obstaculo" checked> Obstáculo</label>
+        <!-- Sprint 4 - Modo oscuro -->
+        <li><button id="btnDarkMode" class="btn btn-outline" aria-pressed="false">🌓</button></li>
+      </ul>
+    </nav>
+  </header>
 
-        <!-- ======================= -->
-        <!-- Sprint 3: Historial de alertas -->
-        <!-- ======================= -->
-        <h3>Historial de Alertas</h3>
-        <ul id="historialAlertas"></ul>
+  <!-- ============================
+  MAIN - Sprint 2
+  ============================ -->
+  <main id="main">
+    <!-- Sprint 2 - Inicio -->
+    <section id="inicio" class="section active hero-section" aria-labelledby="inicio-title">
+      <div class="hero">
+        <div class="hero-info">
+          <h2 id="inicio-title">Tu camino, más accesible</h2>
+          <p>La aplicación <strong>Movilidad Reducida</strong> te ayuda a desplazarte con seguridad, mostrando rutas accesibles, alertas y asistencia de voluntarios.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" data-section="mapa">Explorar Mapa</button>
+            <button class="btn btn-secondary" data-action="registro">Registrarme</button>
+          </div>
+        </div>
+        <div class="hero-image">
+          <a href="#" class="hero-link" data-section="mapa" title="Ir al mapa">
+            <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="Ilustración accesibilidad" />
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ======================= -->
-  <!-- Sprint 4: Registro Voluntarios -->
-  <!-- ======================= -->
-  <section id="registro" class="section">
-    <div class="form-container">
-      <h2>Registro de Voluntarios</h2>
-      <form id="formVoluntarios">
-        <label for="nombre">Nombre completo:</label>
-        <input type="text" id="nombre" required>
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" required>
-        <label for="telefono">Teléfono:</label>
-        <input type="tel" id="telefono" required>
-        <label for="comentario">Comentario:</label>
-        <textarea id="comentario" rows="4" placeholder="Opcional"></textarea>
-        <button type="submit">Registrarse</button>
-      </form>
-      <div id="mensajeRegistro"></div>
-      <div id="numVoluntarios">Voluntarios registrados: 0</div>
-
-      <h3>Voluntarios Registrados</h3>
-      <div class="table-responsive">
-        <table id="tablaVoluntarios">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Teléfono</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <!-- Sprint 2 - Features -->
+      <div class="features-grid">
+        <div class="feature-card" data-section="mapa" tabindex="0">
+          <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Icono mapa" class="feature-img"/>
+          <h3>Mapa Accesible</h3>
+          <p>Detecta rampas, ascensores y obstáculos en tiempo real.</p>
+        </div>
+        <div class="feature-card" data-section="favoritos" tabindex="0">
+          <img src="https://cdn-icons-png.flaticon.com/512/535/535285.png" alt="Icono favoritos" class="feature-img"/>
+          <h3>Favoritos</h3>
+          <p>Guarda tus rutas o lugares preferidos.</p>
+        </div>
+        <div class="feature-card" data-section="historial" tabindex="0">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="Icono historial" class="feature-img"/>
+          <h3>Historial</h3>
+          <p>Consulta tus recorridos o reportes pasados.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ======================= -->
-  <!-- Sprint 5: Conexión Usuario-Voluntario -->
-  <!-- ======================= -->
-  <section id="conexion" class="section">
-    <div class="form-container">
-      <h2>Solicitar Asistencia de Voluntarios</h2>
-      <form id="formSolicitud">
-        <label for="usuarioNombre">Tu nombre:</label>
-        <input type="text" id="usuarioNombre" required>
+    <!-- ============================
+    MAPA - Sprint 5
+    ============================ -->
+    <section id="mapa" class="section">
+      <div class="map-wrapper">
+        <div id="map" class="map"></div>
 
-        <label for="tipoAyuda">Tipo de ayuda:</label>
-        <select id="tipoAyuda" required>
-          <option value="">Selecciona</option>
-          <option value="acompañamiento">Acompañamiento</option>
-          <option value="transporte">Transporte</option>
-          <option value="orientación">Orientación</option>
-        </select>
+        <!-- Sprint 6 - Filtros debajo del mapa -->
+        <div class="map-filters map-filters-bottom">
+          <label><input type="checkbox" value="rampa" checked> Rampa</label>
+          <label><input type="checkbox" value="ascensor" checked> Ascensor</label>
+          <label><input type="checkbox" value="obstaculo" checked> Obstáculo</label>
+        </div>
+      </div>
+    </section>
 
-        <label for="voluntarioSeleccionado">Voluntario:</label>
-        <select id="voluntarioSeleccionado" required>
-          <option value="">Selecciona un voluntario</option>
-        </select>
+    <!-- ============================
+    Historial - Sprint 2
+    ============================ -->
+    <section id="historial" class="section">
+      <h2>Historial de Rutas / Alertas</h2>
+      <div class="card"><ul id="listaHistorial" class="list-puntos"></ul></div>
+    </section>
 
-        <button type="submit">Enviar Solicitud</button>
+    <!-- ============================
+    Favoritos - Sprint 2
+    ============================ -->
+    <section id="favoritos" class="section">
+      <h2>Favoritos</h2>
+      <div class="card"><ul id="listaFavoritos" class="list-puntos"></ul></div>
+    </section>
+  </main>
+
+  <!-- ============================
+  MODALES Y ALERTAS - Sprint 3
+  ============================ -->
+  <div id="modalRegistro" class="modal hidden">
+    <div class="modal-content">
+      <h3>Registro de Usuario</h3>
+      <form id="formRegistro">
+        <label for="nombre">Nombre:</label><input id="nombre" type="text" required>
+        <label for="apellido">Apellido:</label><input id="apellido" type="text" required>
+        <label for="email">Correo electrónico:</label><input id="email" type="email" required>
+        <label for="usuario">Usuario:</label><input id="usuario" type="text" required>
+        <label for="password">Contraseña:</label><input id="password" type="password" required>
+        <label for="telefono">Teléfono:</label><input id="telefono" type="tel">
+        <label for="nacimiento">Fecha de nacimiento:</label><input id="nacimiento" type="date">
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Registrarme</button>
+          <button type="button" id="cancelarRegistro" class="btn btn-cancel">Cancelar</button>
+        </div>
       </form>
-
-      <h3>Solicitudes Enviadas</h3>
-      <ul id="listaSolicitudes"></ul>
     </div>
-  </section>
-</main>
+  </div>
 
-<div id="notificaciones"></div>
-<button id="darkModeToggle" class="btn-darkmode" title="Modo oscuro">🌓</button>
+  <div id="modalLogin" class="modal hidden">
+    <div class="modal-content">
+      <h3>Iniciar Sesión</h3>
+      <form id="formLogin">
+        <label for="loginUsuario">Usuario:</label><input id="loginUsuario" type="text" required>
+        <label for="loginPass">Contraseña:</label><input id="loginPass" type="password" required>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Ingresar</button>
+          <button type="button" id="cancelarLogin" class="btn btn-cancel">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<script src="app.js"></script>
+  <div id="modalPrivacidad" class="modal hidden">
+    <div class="modal-content">
+      <h3>Aviso de Privacidad</h3>
+      <p>Los datos personales se utilizan solo para conectar usuarios y voluntarios.</p>
+      <button id="cerrarPrivacidad" class="btn btn-primary">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="alertaPopup" class="alerta hidden"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script src="app.js" defer></script>
+
+<!-- ============================
+FIN index.html
+============================ -->
 </body>
 </html>
