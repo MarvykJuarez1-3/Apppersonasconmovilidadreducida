@@ -93,7 +93,7 @@ darkBtn.addEventListener('click',()=>{
 });
 
 /* ============================
-HAMBURGUESA RESPONSIVE - Sprint 4
+HAMBURGUESA RESPONSIVE - Sprint 4 revison de funcionalidad 
 ============================ */
 const btnMenu=$('#btnMenu');
 const nav=document.querySelector('nav');
@@ -170,7 +170,7 @@ if('geolocation' in navigator){
 }
 
 /* ============================
-FORMULARIOS SIMULADOS - Sprint 3
+FORMULARIOS SIMULADOS - Sprint 3 y revsion de funcionalidad sprint 7
 ============================ */
 $('#formRegistro').addEventListener('submit', e=>{
   e.preventDefault();
@@ -184,7 +184,7 @@ $('#formLogin').addEventListener('submit', e=>{
 });
 
 /* ============================
-INICIALIZACIÓN - Sprint 1
+INICIALIZACIÓN - Sprint 1 revivision de funcionalidad 
 ============================ */
 document.addEventListener('DOMContentLoaded', ()=>{
   showSection('inicio');

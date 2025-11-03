@@ -101,7 +101,7 @@ BOTONES - Sprint 4
 .btn-cancel:hover{background:#eee;box-shadow:0 0 8px var(--accent-light)}
 
 /* ============================
-MAPA / FILTROS - Sprint 5 y 6
+MAPA / FILTROS - Sprint 5 y 6 revision de funcionalidad sprint 7
 ============================ */
 .map-wrapper{display:grid;grid-template-columns:1fr;gap:20px;position:relative}
 .map{height:70vh;width:100%;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
@@ -154,7 +154,7 @@ body.dark .list-puntos li{background:var(--card-dark);color:var(--text-dark)}
 @keyframes fadeIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
 
 /* ============================
-RESPONSIVE - Sprint 4
+RESPONSIVE - Sprint 4 revsion de funcionalidad sprint 7 
 ============================ */
 @media(max-width:768px){
   .hamburger{display:block}
