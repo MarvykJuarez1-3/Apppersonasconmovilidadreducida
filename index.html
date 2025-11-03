@@ -16,6 +16,38 @@ index.html - Sprints 1 a 6
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 </head>
+<script>
+  // Foro simulado
+  const listaForo = document.getElementById('listaForo');
+  const formForo = document.getElementById('formForo');
+
+  // Función para agregar post al foro
+  function agregarPost(usuario, mensaje){
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${usuario}</strong>: ${mensaje} 
+      <button class="btn-corazon" title="Me gusta">❤️</button>
+      <button class="btn-responder" title="Responder">↩️</button>`;
+    listaForo.prepend(li);
+
+    // Funciones de botones
+    li.querySelector('.btn-corazon').addEventListener('click', ()=>alert('¡Le diste ❤️!'));
+    li.querySelector('.btn-responder').addEventListener('click', ()=>{
+      const resp = prompt('Escribe tu respuesta:');
+      if(resp) agregarPost(usuario+' (respuesta)', resp);
+    });
+  }
+
+  // Evento submit del formulario
+  formForo.addEventListener('submit', e => {
+    e.preventDefault();
+    const usuario = document.getElementById('foroUsuario').value.trim();
+    const mensaje = document.getElementById('foroMensaje').value.trim();
+    if(usuario && mensaje){
+      agregarPost(usuario, mensaje);
+      formForo.reset();
+    }
+  });
+</script>
 
 <body>
 
@@ -37,6 +69,9 @@ index.html - Sprints 1 a 6
         <li><a href="#" class="nav-link action-link" data-action="registro">Registro</a></li>
         <li><a href="#" class="nav-link action-link" data-action="login">Iniciar Sesión</a></li>
         <li><a href="#" class="nav-link action-link" data-action="privacidad">Aviso de Privacidad</a></li>
+        <li><a href="#" class="nav-link" data-section="foro">Foro</a></li>
+
+
 
         <!-- Sprint 4 - Modo oscuro -->
         <li><button id="btnDarkMode" class="btn btn-outline" aria-pressed="false">🌓</button></li>
@@ -167,7 +202,34 @@ index.html - Sprints 1 a 6
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
   <script src="app.js" defer></script>
+
+  <!-- ============================
+Foro - Nuevo
+============================ -->
+<section id="foro" class="section">
+  <h2>Foro de la Comunidad</h2>
+
+  <!-- Lista de publicaciones -->
+  <ul id="listaForo" class="list-puntos"></ul>
+
+  <!-- Formulario para agregar post -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Crear publicación</h3>
+    <form id="formForo">
+      <label for="foroUsuario">Usuario:</label>
+      <input id="foroUsuario" type="text" required>
+
+      <label for="foroMensaje">Mensaje:</label>
+      <textarea id="foroMensaje" rows="4" required></textarea>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button type="submit" class="btn btn-primary">Publicar</button>
+      </div>
+    </form>
+  </div>
+</section>
 
 <!-- ============================
 FIN index.html
