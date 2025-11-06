@@ -84,7 +84,7 @@ document.addEventListener('keydown', e=>{
 });
 
 /* ============================
-MODO OSCURO - Sprint 4
+MODO OSCURO IMPLEMENTACION- Sprint 4
 ============================ */
 const darkBtn=$('#btnDarkMode');
 darkBtn.addEventListener('click',()=>{

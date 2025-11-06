@@ -106,7 +106,7 @@ MAPA / FILTROS - Sprint 5 y 6 revision de funcionalidad sprint 7
 .map-wrapper{display:grid;grid-template-columns:1fr;gap:20px;position:relative}
 .map{height:70vh;width:100%;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
 
-/* Filtros debajo del mapa */
+/* Filtros para usuarios colocados debajo del mapa */
 .map-filters-bottom{
   display:flex;
   justify-content:center;
